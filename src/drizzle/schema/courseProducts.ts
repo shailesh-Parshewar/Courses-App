@@ -15,13 +15,14 @@ export const CourseProductTable = pgTable("course_products", {
 
 
 export const CourseProductRelationships = relations(CourseProductTable, ({ one }) => ({
-    course : one(CourseTable, {
+    courses : one(CourseTable, {
         fields: [CourseProductTable.courseId],
         references: [CourseTable.id]
     }),
-    product : one(ProductTable, {
+    products : one(ProductTable, {
         fields: [CourseProductTable.productId],
         references: [ProductTable.id]
     })
-}));
+})
+);
 

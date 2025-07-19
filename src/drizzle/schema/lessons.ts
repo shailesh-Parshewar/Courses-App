@@ -30,10 +30,11 @@ export const CourseLessonTable = pgTable("course_lessons", {
 
 export const LessonRelationships = relations(
     CourseLessonTable,
-     ({ one, many}) => ({
-    section: one(CourseSectionTable, {
-        fields: [CourseLessonTable.sectionId],
-        references: [CourseSectionTable.id]
-    }),
-    lessonsCompleted : many(UserLessonCompleteTable)
-}))
+    ({ one, many }) => ({
+        sections : one(CourseSectionTable, {
+            fields: [CourseLessonTable.sectionId],
+            references: [CourseSectionTable.id]
+        }),
+        lessonsCompleted: many(UserLessonCompleteTable)
+    })
+)

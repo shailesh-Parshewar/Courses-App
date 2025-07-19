@@ -14,7 +14,7 @@ export const CourseSectionTable = pgTable("course_sections", {
     name: text().notNull(),
 
     status: SectionStatusEnum().notNull().default("private"),
-    orderId: integer().notNull(),
+    order : integer().notNull(),
     courseId: uuid().notNull().references(() => CourseTable.id, { onDelete: "cascade" }),
 
     createdAt,
@@ -24,7 +24,7 @@ export const CourseSectionTable = pgTable("course_sections", {
 export const CourseSectionRelationships = relations(
     CourseSectionTable,
     ({ one, many }) => ({
-        course: one(CourseTable, {
+        courses : one(CourseTable, {
             fields: [CourseSectionTable.courseId],
             references: [CourseTable.id]
         }),

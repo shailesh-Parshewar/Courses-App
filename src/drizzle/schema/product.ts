@@ -4,9 +4,9 @@ import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { CourseProductTable } from "./courseProducts";
 import { PurchaseTable } from "./Purchase";
 
-export const productStatuses = ["public", "private"] as const;
+const productStatuses = ["public", "private"] as const;
 export type productStatus = (typeof productStatuses)[number]
-export const productStatusEnum = pgEnum("product_status", productStatuses);
+const productStatusEnum = pgEnum("product_status", productStatuses);
 
 export const ProductTable = pgTable("products", {
  id,
@@ -20,6 +20,6 @@ export const ProductTable = pgTable("products", {
 })
 
 export const ProductRelationships = relations(ProductTable, ({many}) =>  ({
-    product : many(CourseProductTable),
+    products : many(CourseProductTable),
     purchases : many(PurchaseTable)
 }));

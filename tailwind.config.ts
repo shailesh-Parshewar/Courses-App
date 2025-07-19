@@ -5,6 +5,7 @@ export default {
         "./src/pages/**/*.{js,ts,tsx,jsx,mdx}",
         "./src/app/**/*.{js,ts,tsx,jsx,mdx}",
         "./src/components/**/*.{js,ts,tsx,jsx,mdx}",
+        "./src/features/**/components/**/*.{js,ts,tsx,jsx,mdx}",
     ],
     theme : {
         container : {

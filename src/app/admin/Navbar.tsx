@@ -1,0 +1,44 @@
+import { Badge } from "@/components/ui/badge"
+import { canAccessAdminPages } from "@/permissions/general"
+import { getCurrentUser } from "@/services/clerk"
+import { UserButton } from "@clerk/nextjs"
+import Link from "next/link"
+
+
+const NavBar = () => {
+    return (
+        <header className="flex h-12 shadow bg-background z-10">
+            <nav className="flex gap-4 container">
+                <div className="mr-auto flex items-center gap-2">   
+                <Link className="text-lg hover:underline" href="/">Course Platform</Link>
+                <Badge>Admin</Badge>
+                </div> 
+                        <Link href="/admin/courses" className="hover:bg-accent flex items-center px-2">Courses</Link>
+                        <Link href="/admin/products" className="hover:bg-accent flex items-center px-2">Products</Link>
+                        <Link href="/admin/sales" className="hover:bg-accent flex items-center px-2">Sales</Link>
+                        <div className="size-8 self-center">
+                            <UserButton appearance={{
+                                elements: {
+                                    userButtonAvatarBox: { width: "100%", height: "100%" }
+                                }
+                            }} />
+                        </div>
+            </nav>
+        </header>
+    )
+}
+
+export default NavBar;
+
+
+async function AdminLink() {
+    const user = await getCurrentUser();
+
+    
+    if(!canAccessAdminPages( user.role )) return null;
+    return (
+        <Link href="/admin" className="hover:bg-accent flex items-center px-2">Admin</Link>
+
+    )
+}
+

@@ -6,11 +6,17 @@ import { relations } from "drizzle-orm";
 
 
 export const UserLessonCompleteTable = pgTable("user_lesson_complete_table", {
+
     userId: uuid().notNull().references(() => UsersTable.id, {onDelete : "cascade"}),
     lessonId : uuid().notNull().references(() => CourseLessonTable.id , {onDelete : "cascade"}),
+
+    
     createdAt,
     updatedAt
 }, t => [primaryKey({columns : [t.userId, t.lessonId]})]);
+
+
+
 
 export const userLessonCompleteRelationships = relations(
     UserLessonCompleteTable, 
