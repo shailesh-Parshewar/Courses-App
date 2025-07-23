@@ -24,7 +24,7 @@ export const CourseSectionTable = pgTable("course_sections", {
 export const CourseSectionRelationships = relations(
     CourseSectionTable,
     ({ one, many }) => ({
-        courses : one(CourseTable, {
+        course : one(CourseTable, {
             fields: [CourseSectionTable.courseId],
             references: [CourseTable.id]
         }),

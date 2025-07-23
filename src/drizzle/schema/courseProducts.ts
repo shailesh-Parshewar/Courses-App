@@ -19,7 +19,7 @@ export const CourseProductRelationships = relations(CourseProductTable, ({ one }
         fields: [CourseProductTable.courseId],
         references: [CourseTable.id]
     }),
-    products : one(ProductTable, {
+    product : one(ProductTable, {
         fields: [CourseProductTable.productId],
         references: [ProductTable.id]
     })
