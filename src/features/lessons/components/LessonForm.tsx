@@ -8,7 +8,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-    
+
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {
@@ -31,6 +31,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import z from "zod"
 import { lessonSchema } from "../schema/lesson"
+import { createLesson, updateLesson } from "../actions/lesson"
+import YoutubeVideoPlayer from "./YoutubeVideoPlayer"
 
 
 
@@ -41,7 +43,7 @@ const LessonForm = (
         defaultSectionId,
         sections,
         onSuccess }: {
-            defaultSectionId: string,
+            defaultSectionId?: string,
             sections: {
                 id: string,
                 name: string
@@ -69,23 +71,25 @@ const LessonForm = (
     })
 
     const onSubmit = async (values: z.infer<typeof lessonSchema>) => {
-        // const action = lesson == null
-        //     ? null
-        //     : null;
-        // const data = await action(values);
+        const action = lesson == null
+            ? createLesson
+            : updateLesson.bind(null, lesson.id);
+        const data = await action(values);
 
-        // ActionToast({ actionData: data })
-        // if (!data.error) onSuccess?.();
+        ActionToast({ actionData: data })
+        if (!data.error) onSuccess?.();
     }
 
     const videoId = form.watch("youtubeVideoId");
-    
+    console.log(videoId)
     return (
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex gap-6 flex-col @container"
+                className="flex gap-6 flex-col @container m-2"
             >
+                
+
                 <div className="grid grid-cols-1 @lg:grid-cols-2 gap-6">
 
                     <FormField
@@ -111,7 +115,7 @@ const LessonForm = (
                             <FormItem>
                                 <FormLabel>
                                     <RequiredLabelIcon />
-                                    Youtube Video Id
+                                    Youtube Video Link
                                 </FormLabel>
                                 <FormControl>
                                     <Input {...field} />
@@ -121,73 +125,75 @@ const LessonForm = (
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name="sectionId"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>
-                                    Section
-                                </FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {sections.map(section => (
-                                            <SelectItem key={section.id} value={section.id} >
-                                                {section.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
+                    <div className="flex justify-between">
+                        <FormField
+                            control={form.control}
+                            name="sectionId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Section
+                                    </FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {sections.map(section => (
+                                                <SelectItem key={section.id} value={section.id} >
+                                                    {section.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
 
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>
-                                    Status
-                                </FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {LessonStatuses.map(status => (
-                                            <SelectItem key={status} value={status} >
-                                                {status}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="status"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Status
+                                    </FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {LessonStatuses.map(status => (
+                                                <SelectItem key={status} value={status} >
+                                                    {status}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
 
-                            </FormItem>
-                        )}
-                    />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
 
                 </div>
- <FormField
+                <FormField
                     control={form.control}
                     name="description"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>
-                                <RequiredLabelIcon />
                                 Description
                             </FormLabel>
                             <FormControl>
-                                <Textarea className="min-h-20 resize-none" {...field} value={field.value ?? ""}/>
+                                <Textarea className="min-h-20 resize-none" {...field} value={field.value ?? ""} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -199,9 +205,10 @@ const LessonForm = (
                         disabled={form.formState.isSubmitting}
                         type="submit"
                     >Save
-                    </Button>   
+                    </Button>
                 </div>
-                {/* {videoId ?? <YoutubeVideoPlayer videoId={videoId} />} */}
+              
+            {videoId && <YoutubeVideoPlayer videoId={videoId} />}
             </form>
         </Form>
     )

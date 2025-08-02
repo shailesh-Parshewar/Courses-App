@@ -20,7 +20,7 @@ const LessonFormDialog = ({
     lesson }:
     {
         children: ReactNode,
-        defaultSectionId: string,
+        defaultSectionId?: string,
         sections?: { id: string, name: string }[],
         lesson?: {
             id: string,

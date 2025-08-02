@@ -7,7 +7,9 @@ export default function ConsumerLayout({
     return (
   <>
   <NavBar />
+ 
   {children}
+  
   </>
     )
 }

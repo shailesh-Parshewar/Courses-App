@@ -15,6 +15,7 @@ export async function insertUser(data: typeof UsersTable.$inferInsert) {
 
     if (newUser == null) throw new Error("Failed to create user.");
     revalidateUserCache(newUser.id)
+    
     return newUser;
 }
 export async function updateUser({ clerkUserId }: { clerkUserId: string }, data: Partial<typeof UsersTable.$inferInsert>) {

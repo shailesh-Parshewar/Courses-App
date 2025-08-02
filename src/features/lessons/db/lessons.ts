@@ -62,13 +62,22 @@ export async function updateLesson(id: string, data: Partial<typeof CourseLesson
             .where(eq(CourseLessonTable.id, id))
             .returning()
 
-        if (updatedLesson == null) throw new Error("could not update lesson.");
+        if (updatedLesson == null) {
+            trx.rollback();
+            throw new Error("could not update lesson.");
+        }
 
         const section = await db.query.CourseSectionTable.findFirst({
             columns: { courseId: true },
             where: eq(CourseSectionTable.id, updatedLesson.sectionId)
         })
+
+        if (section == null) return trx.rollback();
+
+        return [updatedLesson, section.courseId]
     })
+
+
 
     if (!updatedLesson) throw new Error("failed to update lesson.");
 
@@ -79,32 +88,60 @@ export async function updateLesson(id: string, data: Partial<typeof CourseLesson
 
 
 export async function deleteLesson(id: string) {
-    const [deletedSection] = await db
-        .delete(CourseLessonTable)
-        .where(eq(CourseLessonTable.id, id))
-        .returning();
+    const [deletedLesson, courseId] = await db.transaction(async trx => {
+        const [deletedLesson] = await trx
+            .delete(CourseLessonTable)
+            .where(eq(CourseLessonTable.id, id))
+            .returning();
 
-    if (deletedSection == null) throw new Error("failed to delete lesson.")
+        if (deletedLesson == null) {
+            trx.rollback();
+            throw new Error("failed to delete lesson.")
+        }
+        const section = await trx.query.CourseSectionTable.findFirst({
+            columns: { courseId: true },
+            where: eq(CourseSectionTable.id, deletedLesson.sectionId)
+        })
+        if (section == null) return trx.rollback();
 
-    revalidateCourseLessonCache({
-        id: deletedSection.id,
-        courseId: deletedSection.courseId
+        return [deletedLesson, section.courseId];
+    })
+    revalidateLessonsCache({
+        id: deletedLesson.id,
+        courseId
     });
-    return deletedSection;
+    return deletedLesson;
 }
 
-export async function updateLessonOrder(sectionIds: string[]) {
-    const sections = await Promise.all(
-        sectionIds.map((id, index) =>
-            db.update(CourseLessonTable)
-                .set({ order: index })
-                .where(eq(CourseLessonTable.id, id))
-                .returning({
-                    courseId: CourseLessonTable.courseId,
-                    id: CourseLessonTable.id
-                }))
+export async function updateLessonOrder(lessonIds: string[]) {
+    const [lessons, courseId] = await db.transaction(async trx => {
+        const lessons = await Promise.all(
+            lessonIds.map((id, index) =>
+                trx.update(CourseLessonTable)
+                    .set({ order: index })
+                    .where(eq(CourseLessonTable.id, id))
+                    .returning({
+                        sectionId: CourseLessonTable.sectionId,
+                        id: CourseLessonTable.id
+                    })
+            )
+        )
+
+        const sectionId = lessons[0]?.[0]?.sectionId;
+        if (sectionId == null) return trx.rollback();
+
+        const section = await trx.query.CourseSectionTable.findFirst({
+            columns: { courseId: true },
+            where: eq(CourseSectionTable.id, sectionId)
+        })
+
+        if (section == null) return trx.rollback();
+
+        return [lessons, section.courseId]
+    })
+
+    lessons.flat().forEach(({ id }) => {
+        revalidateLessonsCache({ courseId, id })
+    }
     )
-    sections.flat().forEach(({ id, courseId }) => (
-        revalidateCourseLessonCache({ id, courseId })
-    ))
 }

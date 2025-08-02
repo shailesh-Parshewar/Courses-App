@@ -65,10 +65,13 @@ export async function deleteSection(id: string) {
 }
 
 export async function updateSectionOrder(sectionIds : string[]) {
-  if(sectionIds.length === 0 || !canUpdateSection(await getCurrentUser())) {
+  if(sectionIds.length === 0) {
    return {error : true, message : "could not re-order sections."}
   }
  
+  if(!canUpdateSection(await getCurrentUser())) {
+   return {error : true, message : "not authorized to re-order sections."}
+  }
   await updateSectionOrderDB(sectionIds);
 
   return {error : true, message : "successfully re-ordered your sections."}

@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button'
 import ActionButton from '@/components/ActionButton'
 import { cn } from '@/lib/utils'
 import LessonFormDialog from './LessonFormDialog';
-import { deleteLesson } from '../db/lessons';
+import { deleteLesson, updateLessonsOrder } from '../actions/lesson';
+
 
 
 

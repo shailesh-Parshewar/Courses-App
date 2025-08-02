@@ -12,5 +12,4 @@ export function getCourseIdTag(id: string) {
 export function revalidateCourseCache(id: string) {
     revalidateTag(getGlobalCoursesTag());
     revalidateTag(getCourseIdTag(id));
-    
 }

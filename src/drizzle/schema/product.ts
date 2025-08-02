@@ -4,7 +4,7 @@ import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { CourseProductTable } from "./courseProducts";
 import { PurchaseTable } from "./Purchase";
 
-const productStatuses = ["public", "private"] as const;
+export const productStatuses = ["public", "private"] as const;
 export type productStatus = (typeof productStatuses)[number]
 const productStatusEnum = pgEnum("product_status", productStatuses);
 

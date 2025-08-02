@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
 
 
 
@@ -17,6 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <Suspense fallback="idk why this suspence is required">
+
     <ClerkProvider>
       <html lang="en">
         <body
@@ -27,5 +30,6 @@ export default function RootLayout({
         </body>
       </html>
     </ClerkProvider>
+    </Suspense>
   );
 }

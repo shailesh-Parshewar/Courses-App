@@ -1,6 +1,7 @@
 
 
-import { userRole } from "@/drizzle/schema";
+import { CourseLessonTable, userRole } from "@/drizzle/schema";
+import { eq, or } from "drizzle-orm";
 
 export function canCreateLesson({ role }
     : { role: userRole | undefined }) {
@@ -15,3 +16,7 @@ export function canDeleteLesson({ role }
     : { role: userRole | undefined }) {
     return role === "admin"
 }
+
+export const wherePublicLesson = or(
+    eq(CourseLessonTable.status, "public")
+    , eq(CourseLessonTable.status, "preview"));

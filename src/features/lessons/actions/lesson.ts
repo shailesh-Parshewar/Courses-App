@@ -1,3 +1,4 @@
+"use server";
 import { getCurrentUser } from "@/services/clerk";
 import {
     canCreateLesson,
@@ -15,7 +16,7 @@ import {
 } from "../db/lessons";
 
 
-export async function createLesson(courseId: string, unsafeData: z.infer<typeof lessonSchema>) {
+export async function createLesson(unsafeData: z.infer<typeof lessonSchema>) {
     const { success, data } = lessonSchema.safeParse(unsafeData);
 
     if (!success) {
@@ -25,7 +26,7 @@ export async function createLesson(courseId: string, unsafeData: z.infer<typeof 
         return { error: true, message: "you are not authorised to create lessons." }
     }
 
-    const order = await getNextCourseLessonOrder(courseId);
+    const order = await getNextCourseLessonOrder(data.sectionId);
     await insertLesson({ ...data, order });
 
 

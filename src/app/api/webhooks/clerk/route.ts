@@ -1,5 +1,5 @@
 import { env } from "@/data/env/server";
-import { revalidateUserCache } from "@/features/users/db/cache";
+
 import { deleteUser, insertUser, updateUser } from "@/features/users/db/users";
 import { syncClerkUserMetadata } from "@/services/clerk";
 import { WebhookEvent } from "@clerk/nextjs/server";
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
         if (name == "") return new Response("No name", { status: 400 })
 
         if (event.type == "user.created") {
-         console.log("is this even executing")
+        
           const user = await insertUser({
             clerkUserId: event.data.id,
             name,
@@ -59,6 +59,7 @@ export async function POST(req: Request) {
             imageUrl: event.data.image_url,
             role: "user"
           })
+          
           await syncClerkUserMetadata(user);
         } else {
         
