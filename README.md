@@ -1,3 +1,5 @@
+This project is a course app where you can buy, watch, refund courses. for admins it offers the ability create courses, add sections, drag and drop to change their order, bundle different course into a single product.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
