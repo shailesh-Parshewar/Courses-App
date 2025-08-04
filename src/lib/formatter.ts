@@ -19,3 +19,7 @@ export function formatPrice(price: number, { showZero = true } = {}) {
 
     return formatter.format(price);
 }
+const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, { dateStyle : "medium", timeStyle: "short"})
+export function formatDate(date : Date) {
+    return DATE_FORMATTER.format(date)
+}

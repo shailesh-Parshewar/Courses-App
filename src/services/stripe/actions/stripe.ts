@@ -25,9 +25,9 @@ export async function getClientSessionsSecret(
                     product_data: {
                         name: product.name,
                         images: [new URL(product.imageUrl, env.NEXT_PUBLIC_SERVER_URL).href],
-                        description: product.description
+                        description: product.description,      
                     },
-                    unit_amount : product.price * 100
+                    unit_amount : product.price * 100,
                 },
                
             }

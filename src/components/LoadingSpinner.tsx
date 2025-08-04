@@ -8,7 +8,7 @@ const LoadingSpinner = (
         className,
         ...props }
         : {
-            className: string,
+            className?: string,
             props?: ComponentProps<typeof Loader2Icon>
         }) => {
     return (

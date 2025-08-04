@@ -19,3 +19,18 @@ export async function insertUserCourseAccess(
     accesses.map(revalidateUserCourseAccessCache);
     return accesses;
 }
+
+
+export async function revokeUserCourseAccess(
+   { 
+userId,
+courseIds
+   } : {
+    userId : string,
+    courseIds : string[] 
+   }, 
+    trx : Omit<typeof db, "$client"> = db
+) {
+
+
+}

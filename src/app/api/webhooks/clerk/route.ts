@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   }
 
   // Handle events
-  console.log("sdfdfjsdhfkjsdfshfsdfhljf");
+
   switch (event.type) {
     case "user.created":
     case "user.updated":
