@@ -1,5 +1,5 @@
-import { ProductTable, userRole } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { userRole } from "@/drizzle/schema";
+
 
 export function canRefundPurchases({ role }
     : { role: userRole | undefined }) {

@@ -44,3 +44,4 @@ if(!canDeleteCourses(await getCurrentUser())) {
 
  return {error: false, message : "Successfully deleted your course"}
 }
+

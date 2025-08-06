@@ -1,6 +1,7 @@
 import PageHeader from '@/components/PageHeader';
 import { db } from '@/drizzle/db';
 import { PurchaseTable as DbPurchaseTable } from '@/drizzle/schema';
+import PurchaseTable from '@/features/purchase/components/PurchaseTable';
 import { getGlobalPurchaseTag } from '@/features/purchase/db/cache/purchase';
 import { getUserGlobalTag } from '@/features/users/db/cache';
 import { desc } from 'drizzle-orm';
